@@ -31,8 +31,8 @@ public struct GameDetails: Codable {
     let thumb_url: String
     let image_url: String
     let url: String
-    let price: Float
-    let msrp: Float
+    //let price: String
+    //let msrp: Float
     let discount: Float
     let primary_publisher: [String]
     let mechanics: [GameMechanics]
