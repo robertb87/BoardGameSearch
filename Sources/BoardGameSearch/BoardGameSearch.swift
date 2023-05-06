@@ -19,18 +19,18 @@ public struct SearchResults: Codable {
 public struct GameDetails: Codable {
     let id: String
     let name: String
-    let names: [String]
-    let year_published: Int
-    let min_players: Int
-    let max_players: Int
-    let min_playtime: Int
-    let max_playtime: Int
-    let min_age: Int
-    let description: String
-    let description_preview: String
-    let thumb_url: String
-    let image_url: String
-    let url: String
+    let names: [String]?
+    let year_published: Int?
+    let min_players: Int?
+    let max_players: Int?
+    let min_playtime: Int?
+    let max_playtime: Int?
+    let min_age: Int?
+    let description: String?
+    let description_preview: String?
+    let thumb_url: String?
+    let image_url: String?
+    let url: String?
     //let price: String
     //let msrp: Float
    //let discount: Float
