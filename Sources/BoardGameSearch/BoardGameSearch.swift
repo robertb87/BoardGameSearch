@@ -7,6 +7,10 @@ public struct BoardGameSearch {
     }
 }
 
+public struct GameMechanics: Codable {
+    let id: String
+}
+
 public struct GameDetails: Codable {
     let id: String
     let name: String
@@ -26,8 +30,8 @@ public struct GameDetails: Codable {
     let msrp: Float
     let discount: Float
     let primary_publisher: [String]
-//    let mechanics: String
-//    let categories: String
+    let mechanics: [GameMechanics]
+    let categories: [GameMechanics]
     let designers: [String]
     let developers: [String]
     let artists: [String]
