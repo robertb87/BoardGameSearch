@@ -7,7 +7,7 @@ public struct BoardGameSearch {
     }
 }
 
-struct GameDetails: Codable {
+public struct GameDetails: Codable {
     let id: String
     let name: String
     let names: [String]
@@ -36,7 +36,7 @@ struct GameDetails: Codable {
     let reddit_day_count: Int
 }
 
-class Search {
+public class Search {
     var url: URL? //https://api.boardgameatlas.com/api/search?ids=TAAifFP590&client_id=JLBr5npPhV
 
     func search() {
