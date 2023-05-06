@@ -11,6 +11,11 @@ public struct GameMechanics: Codable {
     let id: String
 }
 
+public struct SearchResults: Codable {
+    let games: [GameDetails]
+    let count: Int
+}
+
 public struct GameDetails: Codable {
     let id: String
     let name: String
@@ -61,7 +66,7 @@ public class Search {
             let request = URLRequest(url: url)
             URLSession.shared.dataTask(with: request) { data, response, error in
                 if let data = data {
-                    let gameDetails: [GameDetails] = try! JSONDecoder().decode([GameDetails].self, from: data)
+                    let gameDetails: SearchResults = try! JSONDecoder().decode(SearchResults.self, from: data)
                     print(gameDetails)
                 }
 
