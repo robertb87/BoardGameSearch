@@ -39,6 +39,10 @@ public struct GameDetails: Codable {
 public class Search {
     var url: URL? //https://api.boardgameatlas.com/api/search?ids=TAAifFP590&client_id=JLBr5npPhV
 
+    public init() {
+
+    }
+
     public func search() {
         url = URL(string:"https://api.boardgameatlas.com/api/search?")
         let query = URLQueryItem(name: "name", value: "Monopoly")
