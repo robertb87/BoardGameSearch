@@ -34,12 +34,12 @@ public struct GameDetails: Codable {
     //let price: String
     //let msrp: Float
    //let discount: Float
-    let primary_publisher: [String]
+    //let primary_publisher: [String]
     //let mechanics: [GameMechanics]
     //let categories: [GameMechanics]
-    let designers: [String]
-    let developers: [String]
-    let artists: [String]
+   // let designers: [String]
+    //let developers: [String]
+  //  let artists: [String]
     //let reddit_all_time_count: Int
     //let reddit_week_count: Int
     //let reddit_day_count: Int
