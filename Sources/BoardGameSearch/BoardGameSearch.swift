@@ -12,8 +12,8 @@ public struct GameMechanics: Codable {
 }
 
 public struct SearchResults: Decodable {
-    let games: [GameDetails]
-    let count: Int
+    public let games: [GameDetails]
+    public let count: Int
 }
 
 public struct GameDetails: Decodable {
@@ -44,19 +44,19 @@ public struct GameDetails: Decodable {
         case artists
     }
 
-    let id: String
-    let name: String
-    let names: [String]
-    let yearPublished: Int
-    let minPlayers: Int
-    let maxPlayers: Int
-    let minPlaytime: Int
-    let maxPlaytime: Int
-    let minAge: Int
-    let description: String
-    let descriptionPreview: String
-    let thumbUrl: String
-    let imageUrl: String
+   public let id: String
+   public let name: String
+   public let names: [String]
+   public let yearPublished: Int
+   public let minPlayers: Int
+   public let maxPlayers: Int
+   public let minPlaytime: Int
+   public let maxPlaytime: Int
+   public let minAge: Int
+   public let description: String
+   public let descriptionPreview: String
+   public let thumbUrl: String
+   public let imageUrl: String
 //    let url: String?
 //    let price: String
 //    let msrp: Float
@@ -64,9 +64,9 @@ public struct GameDetails: Decodable {
 //    let primaryPublisher: [String]
 //    let mechanics: [GameMechanics]
 //    let categories: [GameMechanics]
-    let designers: [String]
-    let developers: [String]
-    let artists: [String]
+   public let designers: [String]
+   public let developers: [String]
+   public let artists: [String]
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -163,9 +163,9 @@ public class Search {
 
     }
 
-    public func search() {
+    public func search(for name: String, onCompletion completion: @escaping (SearchResults) -> Void) {
         url = URL(string:"https://api.boardgameatlas.com/api/search?")
-        let query = URLQueryItem(name: "name", value: "Monopoly")
+        let query = URLQueryItem(name: "name", value: name)
         let clientID = URLQueryItem(name: "client_id", value: "GEFPATEZMn")
         if #available(iOS 16.0, *) {
             url?.append(queryItems: [query, clientID])
@@ -178,7 +178,7 @@ public class Search {
             URLSession.shared.dataTask(with: request) { data, response, error in
                 if let data = data {
                     let gameDetails: SearchResults = try! JSONDecoder().decode(SearchResults.self, from: data)
-                    print(gameDetails)
+                    completion(gameDetails)
                 }
 
                 if let response = response {
