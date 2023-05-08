@@ -163,7 +163,7 @@ public class Search {
 
     }
 
-    public func search(for name: String, onCompletion completion: @escaping (SearchResults) -> Void) {
+    public func search(for name: String, onCompletion completion: @escaping ([GameDetails]) -> Void) {
         url = URL(string:"https://api.boardgameatlas.com/api/search?")
         let query = URLQueryItem(name: "name", value: name)
         let clientID = URLQueryItem(name: "client_id", value: "GEFPATEZMn")
@@ -178,7 +178,7 @@ public class Search {
             URLSession.shared.dataTask(with: request) { data, response, error in
                 if let data = data {
                     let gameDetails: SearchResults = try! JSONDecoder().decode(SearchResults.self, from: data)
-                    completion(gameDetails)
+                    completion(gameDetails.games)
                 }
 
                 if let response = response {
