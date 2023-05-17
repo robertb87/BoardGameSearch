@@ -1,180 +1,37 @@
 import Foundation
 
-public struct BoardGameSearch {
-    public private(set) var text = "Hello, World!"
-
-    public init() {
-    }
-}
-
 public struct GameMechanics: Codable {
     let id: String
 }
 
-public struct SearchResults: Decodable {
-    public let games: [GameDetails]
-    public let count: Int
-}
 
-public struct GameDetails: Decodable {
-
-    enum CodingKeys: String, CodingKey {
-        case id
-        case name
-        case names
-        case yearPublished      = "year_published"
-        case minPlayers         = "min_players"
-        case maxPlayers         = "max_players"
-        case minPlaytime        = "min_playtime"
-        case maxPlaytime        = "max_playtime"
-        case minAge             = "min_age"
-        case description
-        case descriptionPreview = "description_preview"
-        case tumbleURL          = "thumb_url"
-        case imageURL           = "image_url"
-        case url
-        case price
-        case msrp
-        case discount
-        case primagePublisher   = "primary_publisher"
-        case mechanics
-        case categories
-        case designers
-        case developers
-        case artists
-    }
-
-   public let id: String
-   public let name: String
-   public let names: [String]
-   public let yearPublished: Int
-   public let minPlayers: Int
-   public let maxPlayers: Int
-   public let minPlaytime: Int
-   public let maxPlaytime: Int
-   public let minAge: Int
-   public let description: String
-   public let descriptionPreview: String
-   public let thumbUrl: String
-   public let imageUrl: String
-//    let url: String?
-//    let price: String
-//    let msrp: Float
-//    let discount: Float
-//    let primaryPublisher: [String]
-//    let mechanics: [GameMechanics]
-//    let categories: [GameMechanics]
-   public let designers: [String]
-   public let developers: [String]
-   public let artists: [String]
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-
-        id                          = try container.decode(String.self, forKey: .id)
-        name                        = try container.decode(String.self, forKey: .name)
-        if let names                = try? container.decode([String].self, forKey: .names) {
-            self.names = names
-        } else {
-            self.names = [String]()
-        }
-        if let yearPublished        = try? container.decode(Int.self, forKey: .yearPublished) {
-            self.yearPublished = yearPublished
-        } else  {
-            self.yearPublished = -1
-        }
-        if let minPlayers           = try? container.decode(Int.self, forKey: .minPlayers) {
-            self.minPlayers = minPlayers
-        } else {
-            self.minPlayers = -1
-        }
-        if let maxPlayers           = try? container.decode(Int.self, forKey:  .maxPlayers) {
-            self.maxPlayers = maxPlayers
-        } else {
-            self.maxPlayers = -1
-        }
-        if let minPlaytime          = try? container.decode(Int.self, forKey: .minPlaytime) {
-            self.minPlaytime = minPlaytime
-        } else {
-            self.minPlaytime = -1
-        }
-        if let maxPlaytime          = try? container.decode(Int.self, forKey: .maxPlaytime) {
-            self.maxPlaytime = maxPlaytime
-        } else {
-            self.maxPlaytime = -1
-        }
-        if let minAge               = try? container.decode(Int.self, forKey: .minAge) {
-            self.minAge = minAge
-        } else {
-            self.minAge = -1
-        }
-        if let description          = try? container.decode(String.self, forKey: .description) {
-            self.description = description
-        } else {
-            self.description = "No description"
-        }
-        if let descriptionPreview   = try? container.decode(String.self, forKey: .descriptionPreview) {
-            self.descriptionPreview = descriptionPreview
-        } else {
-            self.descriptionPreview = ""
-        }
-        if let thumbUrl             = try? container.decode(String.self, forKey: .tumbleURL) {
-            self.thumbUrl = thumbUrl
-        } else {
-            self.thumbUrl = ""
-        }
-        if let imageUrl             = try? container.decode(String.self, forKey: .imageURL) {
-            self.imageUrl = imageUrl
-        } else  {
-            self.imageUrl = ""
-        }
-//        price: String
-//        msrp: Float
-//        discount: Float
-//        primaryPublisher: [String]
-//        mechanics: [GameMechanics]
-//        categories: [GameMechanics]
-        if let designers            = try? container.decode([String].self, forKey: .designers) {
-            self.designers = designers
-        } else {
-            self.designers = []
-        }
-        if let developers           = try? container.decode([String].self, forKey: .developers) {
-            self.developers = developers
-        } else {
-            self.developers = []
-        }
-        if let artists              = try? container.decode([String].self, forKey: .artists) {
-            self.artists = artists
-        } else {
-            self.artists = []
-        }
-
-    }
-
-
-
-}
-
+@available(iOS 13.0.0, *)
 public class Search {
-    var url: URL? //https://api.boardgameatlas.com/api/search?ids=TAAifFP590&client_id=JLBr5npPhV
+    private let _clientID: String
+    private var _clientIDQueryItem: URLQueryItem {
+        return URLQueryItem(name: "client_id", value: _clientID)
+    }
+    private var _url: URL
 
-    public init() {
+    public init(withClientID clientID: String) {
+        guard let url = URL(string: "https://api.boardgameatlas.com/api/search?" ) else { fatalError("Failed to init BoardGame Search, bad URL")}
 
+        self._clientID = clientID
+        self._url = url
     }
 
     public func search(for name: String, onCompletion completion: @escaping ([GameDetails]) -> Void) {
-        url = URL(string:"https://api.boardgameatlas.com/api/search?")
         let query = URLQueryItem(name: "name", value: name)
-        let clientID = URLQueryItem(name: "client_id", value: "GEFPATEZMn")
+        let clientID = URLQueryItem(name: "client_id", value: _clientID)
+
         if #available(iOS 16.0, *) {
-            url?.append(queryItems: [query, clientID])
+            _url.append(queryItems: [query, clientID])
         } else {
             // Fallback on earlier versions
             fatalError()
         }
-        if let url = url {
-            let request = URLRequest(url: url)
+
+            let request = URLRequest(url: _url)
             URLSession.shared.dataTask(with: request) { data, response, error in
                 if let data = data {
                     let gameDetails: SearchResults = try! JSONDecoder().decode(SearchResults.self, from: data)
@@ -190,10 +47,98 @@ public class Search {
                 }
             }
             .resume()
+    }
 
+
+    public func search(withQuery query: SearchQuery) async throws -> [GameDetails] {
+        let urlQueryItems = buildURLQueryItems(from: query)
+        var url = _url
+
+        if #available(iOS 16.0, *) {
+            url.append(queryItems: urlQueryItems)
+        } else {
+            // Fallback on earlier versions
         }
 
+        let request = URLRequest(url: url)
 
+        do {
+            let response: (data: Data, response: URLResponse) = try await URLSession.shared.data(for: request)
 
+            let gameDetails: SearchResults = try! JSONDecoder().decode(SearchResults.self, from: response.data)
+
+            return gameDetails.games
+        } catch {
+            throw error
+        }
     }
+
+
+    private func buildURLQueryItems(from query: SearchQuery) -> [URLQueryItem] {
+        var items: [URLQueryItem] = []
+
+        for item in query.items {
+            items.append(URLQueryItem(name: item.queryType.rawValue, value: item.value))
+        }
+
+        return items
+    }
+}
+
+public struct SearchQuery {
+    var items: [SearchQueryItem]
+
+    func add(item: SearchQueryItem) -> SearchQuery {
+        var newItemsList = items
+        newItemsList.append(item)
+        return SearchQuery(items: newItemsList)
+    }
+}
+public struct SearchQueryItem {
+    let queryType: SearchQueryType
+    let value: String
+}
+
+public enum SearchQueryType: String {
+    case name                       = "name"
+    case limit                      = "limit"
+    case skip                       = "skip"
+    case ids                        = "ids"
+    case listID                     = "list_id"
+    case kickstarter                = "kickstarter"
+    case random                     = "random"
+    case exact                      = "exact"
+    case fuzzyMatching              = "fuzzy_matching"
+    case designer                   = "designer"
+    case publisher                  = "publisher"
+    case artist                     = "artist"
+    case mechanics                  = "mechanics"
+    case categories                 = "categories"
+    case orderBy                    = "order_by"
+    case ascending                  = "ascending"
+    case minPlayers                 = "min_players"
+    case maxPlayers                 = "max_players"
+    case minPlaytime                = "min_playtime"
+    case maxPlaytime                = "max_playtime"
+    case minAge                     = "min_age"
+    case yearPublished              = "year_published"
+    case minPlayerGreaterThan       = "gt_min_players"
+    case maxPlayersGreaterThan      = "gt_max_players"
+    case minPlaytimeGreaterThan     = "gt_min_playtime"
+    case maxPlaytimeGreaterThan     = "gt_max_playtime"
+    case minAgeGreaterThan          = "gt_min_age"
+    case yearPublisedGreaterThan    = "gt_year_published"
+    case priceGreaterThan           = "gt_price"
+    case msrpGreaterThan            = "gt_msrp"
+    case discountGreaterThan        = "gt_discount"
+    case minPlayersLessThan         = "lt_min_players"
+    case maxPlayersLessThan         = "lt_max_players"
+    case playtimeLessThan           = "lt_min_playtime"
+    case maxPlaytimeLessThan        = "lt_max_playtime"
+    case minAgeLessThan             = "lt_min_age"
+    case yearPublishedLessThan      = "lt_year_published"
+    case priceLessThan              = "lt_price"
+    case msrpLessThan               = "lt_msrp"
+    case discountLessThan           = "lt_discount"
+    case fields
 }
