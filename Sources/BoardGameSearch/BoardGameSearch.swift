@@ -34,8 +34,9 @@ public class Search {
             let request = URLRequest(url: _url)
             URLSession.shared.dataTask(with: request) { data, response, error in
                 if let data = data {
-                    let gameDetails: SearchResults = try! JSONDecoder().decode(SearchResults.self, from: data)
-                    completion(gameDetails.games)
+                        if let gameDetails: SearchResults = try? JSONDecoder().decode(SearchResults.self, from: data) {
+                            completion(gameDetails.games)
+                        }
                 }
 
                 if let response = response {
