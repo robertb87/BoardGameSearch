@@ -23,15 +23,16 @@ public class Search {
     public func search(for name: String, onCompletion completion: @escaping ([GameDetails]) -> Void) {
         let query = URLQueryItem(name: "name", value: name)
         let clientID = URLQueryItem(name: "client_id", value: _clientID)
+        var url = _url
 
         if #available(iOS 16.0, *) {
-            _url.append(queryItems: [query, clientID])
+            url.append(queryItems: [query, clientID])
         } else {
             // Fallback on earlier versions
             fatalError()
         }
 
-            let request = URLRequest(url: _url)
+            let request = URLRequest(url: url)
             URLSession.shared.dataTask(with: request) { data, response, error in
                 if let data = data {
                         if let gameDetails: SearchResults = try? JSONDecoder().decode(SearchResults.self, from: data) {
