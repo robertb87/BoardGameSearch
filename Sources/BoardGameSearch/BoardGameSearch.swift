@@ -75,6 +75,102 @@ public class Search {
         }
     }
 
+    public func buildSearchQuery(name:                    String? = nil,
+                                 limit:                   String? = nil,
+                                 skip:                    String? = nil,
+                                 ids:                     String? = nil,
+                                 listID:                  String? = nil,
+                                 kickstarter:             String? = nil,
+                                 random:                  String? = nil,
+                                 exact:                   String? = nil,
+                                 fuzzyMatching:           String? = nil,
+                                 designer:                String? = nil,
+                                 publisher:               String? = nil,
+                                 artist:                  String? = nil,
+                                 mechanics:               String? = nil,
+                                 categories:              String? = nil,
+                                 orderBy:                 String? = nil,
+                                 ascending:               String? = nil,
+                                 minPlayers:              String? = nil,
+                                 maxPlayers:              String? = nil,
+                                 minPlaytime:             String? = nil,
+                                 maxPlaytime:             String? = nil,
+                                 minAge:                  String? = nil,
+                                 yearPublished:           String? = nil,
+                                 minPlayerGreaterThan:    String? = nil,
+                                 maxPlayersGreaterThan:   String? = nil,
+                                 minPlaytimeGreaterThan:  String? = nil,
+                                 maxPlaytimeGreaterThan:  String? = nil,
+                                 minAgeGreaterThan:       String? = nil,
+                                 yearPublisedGreaterThan: String? = nil,
+                                 priceGreaterThan:        String? = nil,
+                                 msrpGreaterThan:         String? = nil,
+                                 discountGreaterThan:     String? = nil,
+                                 minPlayersLessThan:      String? = nil,
+                                 maxPlayersLessThan:      String? = nil,
+                                 playtimeLessThan:        String? = nil,
+                                 maxPlaytimeLessThan:     String? = nil,
+                                 minAgeLessThan:          String? = nil,
+                                 yearPublishedLessThan:   String? = nil,
+                                 priceLessThan:           String? = nil,
+                                 msrpLessThan:            String? = nil,
+                                 discountLessThan:        String? = nil,
+                                 fields:                  String? = nil)
+                                                                        -> SearchQuery
+    {
+        var items: [SearchQueryType: String?] = [:]
+
+        items[.name] = name
+        items[.limit] = limit
+        items[.skip] = skip
+        items[.ids] = ids
+        items[.listID] = listID
+        items[.kickstarter] = kickstarter
+        items[.random] = random
+        items[.exact] = exact
+        items[.fuzzyMatching] = fuzzyMatching
+        items[.designer] = designer
+        items[.publisher] = publisher
+        items[.artist] = artist
+        items[.mechanics] = mechanics
+        items[.categories] = categories
+        items[.orderBy] = orderBy
+        items[.ascending] = ascending
+        items[.minPlayers] = minPlayers
+        items[.maxPlayers] = maxPlayers
+        items[.minPlaytime] = minPlaytime
+        items[.maxPlaytime] = maxPlaytime
+        items[.minAge] = minAge
+        items[.yearPublished] = yearPublished
+        items[.minPlayerGreaterThan] = minPlayerGreaterThan
+        items[.maxPlayersGreaterThan] = maxPlayersGreaterThan
+        items[.minPlaytimeGreaterThan] = minPlaytimeGreaterThan
+        items[.maxPlaytimeGreaterThan] = maxPlaytimeGreaterThan
+        items[.minAgeGreaterThan] = minAgeGreaterThan
+        items[.yearPublisedGreaterThan] = yearPublisedGreaterThan
+        items[.priceGreaterThan] = priceGreaterThan
+        items[.msrpGreaterThan] = msrpGreaterThan
+        items[.discountGreaterThan] = discountGreaterThan
+        items[.minPlayersLessThan] = minPlayersLessThan
+        items[.maxPlayersLessThan] = maxPlayersLessThan
+        items[.playtimeLessThan] = playtimeLessThan
+        items[.maxPlaytimeLessThan] = maxPlaytimeLessThan
+        items[.minAgeLessThan] = minAgeLessThan
+        items[.yearPublishedLessThan] = yearPublishedLessThan
+        items[.priceLessThan] = priceLessThan
+        items[.msrpLessThan] = msrpLessThan
+        items[.discountLessThan] = discountLessThan
+        items[.fields] = fields
+
+        var searchQueryItems = items.compactMap { $0 }.map({ item in
+            SearchQueryItem(queryType: item.key, value: item.value!)
+        })
+
+        let query = SearchQuery(items: searchQueryItems)
+
+        return query
+    }
+
 
     private func buildURLQueryItems(from query: SearchQuery) -> [URLQueryItem] {
         var items: [URLQueryItem] = []
