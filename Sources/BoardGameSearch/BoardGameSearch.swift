@@ -162,9 +162,9 @@ public class Search {
         items[.discountLessThan] = discountLessThan
         items[.fields] = fields
 
-        var searchQueryItems = items.compactMap { $0 }.map({ item in
+        let searchQueryItems = items.compactMap({$0}).map { item in
             SearchQueryItem(queryType: item.key, value: item.value!)
-        })
+        }
 
         let query = SearchQuery(items: searchQueryItems)
 
