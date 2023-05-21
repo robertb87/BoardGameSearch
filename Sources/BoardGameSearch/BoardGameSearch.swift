@@ -67,9 +67,11 @@ public class Search {
         do {
             let response: (data: Data, response: URLResponse) = try await URLSession.shared.data(for: request)
 
-            let gameDetails: SearchResults = try! JSONDecoder().decode(SearchResults.self, from: response.data)
+            if let gameDetails: SearchResults = try? JSONDecoder().decode(SearchResults.self, from: response.data) {
+                return gameDetails.games
+            }
 
-            return gameDetails.games
+            return []
         } catch {
             throw error
         }
