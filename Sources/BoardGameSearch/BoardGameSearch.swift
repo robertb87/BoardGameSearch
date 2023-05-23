@@ -180,6 +180,8 @@ public class Search {
 
     private func buildURLQueryItems(from query: SearchQuery) -> [URLQueryItem] {
         var items: [URLQueryItem] = []
+        let clientID = URLQueryItem(name: "client_id", value: _clientID)
+        items.append(clientID)
 
         for item in query.items {
             items.append(URLQueryItem(name: item.queryType.rawValue, value: item.value))
